@@ -2082,6 +2082,15 @@ describe "TreeView", ->
           expect(moveDialog.miniEditor).toHaveFocus()
 
         describe "when the path is changed and confirmed", ->
+          it "removes the dialog and focuses the tree view", ->
+            newPath = path.join(rootDirPath, 'foo-test-file.txt')
+            moveDialog.miniEditor.setText(path.basename(newPath))
+
+            atom.commands.dispatch(moveDialog.element, 'core:confirm')
+
+            expect(atom.workspace.getModalPanels().length).toBe 0
+            expect(treeView.find(".tree-view")).toMatchSelector(':focus')
+
           describe "when all the directories along the new path exist", ->
             it "moves the file, updates the tree view, and closes the dialog", ->
               newPath = path.join(rootDirPath, 'renamed-test-file.txt')
