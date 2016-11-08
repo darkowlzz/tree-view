@@ -28,7 +28,9 @@ class Dialog extends View
       range = [[0, initialPath.length - baseName.length], [0, selectionEnd]]
       @miniEditor.getModel().setSelectedBufferRange(range)
 
-  attach: ->
+  attach: (currentSelectedEntry) ->
+    if currentSelectedEntry?
+      @selectionPath = currentSelectedEntry.getPath()
     @panel = atom.workspace.addModalPanel(item: this.element)
     @miniEditor.focus()
     @miniEditor.getModel().scrollToCursorPosition()
@@ -37,7 +39,12 @@ class Dialog extends View
     panelToDestroy = @panel
     @panel = null
     panelToDestroy?.destroy()
-    atom.workspace.getActivePane().activate()
+    if @selectionPath?
+      parentPath = @selectionPath.substring(0, @selectionPath.lastIndexOf(path.sep))
+      $("[data-path='#{parentPath}']").parents('li')[0].classList.add('selected')
+      $('.tree-view').focus()
+    else
+      atom.workspace.getActivePane().activate()
 
   cancel: ->
     @close()

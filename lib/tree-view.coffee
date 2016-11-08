@@ -456,7 +456,7 @@ class TreeView extends View
     if oldPath
       MoveDialog ?= require './move-dialog'
       dialog = new MoveDialog(oldPath)
-      dialog.attach()
+      dialog.attach(@selectedEntry())
 
   # Get the outline of a system call to the current platform's file manager.
   #
